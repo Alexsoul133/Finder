@@ -8,7 +8,7 @@ import (
 
 	finder "github.com/Alexsoul133/Finder"
 )
-
+const cachefile="cac.che"
 type Find struct {
 	path  string
 	find  string
@@ -27,7 +27,7 @@ type Video struct {
 
 func newfind(path string, find string) *Find {
 	return &Find{
-		cache: "cache.txt",
+		cache: cachefile,
 		path:  path,
 		find:  find,
 	}
@@ -60,6 +60,7 @@ func (f *Find) newfind() []string {
 		fmt.Fprintf(os.Stderr, "Error in Finder.Cache: %s\n", err)
 	}
 	cachestr := strings.Join(cache, " ")
+	findstr := strings.Join(find, " ")
 	w, err := os.OpenFile(f.cache, os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error open cache: %s\n", err)
@@ -68,6 +69,7 @@ func (f *Find) newfind() []string {
 		if !strings.Contains(cachestr, find[i]) {
 			_, err = w.WriteString(find[i] + "\n")
 		}
+		if !strings.Contains(findstr,)
 	}
 	return find
 }
@@ -97,7 +99,7 @@ func main() {
 
 	} else {
 		input := newfind(os.Args[2], os.Args[1])
-		println("Args[3] not input. Will find in \\" + input.path + "\n")
+		println("Will find in " + input.path + "\n")
 		runfinder(input)
 	}
 	print("\a")
