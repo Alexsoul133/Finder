@@ -9,11 +9,6 @@ import (
 	finder "github.com/Alexsoul133/Finder"
 )
 
-// type Finder interface {
-// 	findcache() []string
-// 	// refreshcache() []string
-// 	newfind() []string
-// }
 type Find struct {
 	path  string
 	find  string
@@ -55,7 +50,6 @@ func (f *Find) findcache() []string {
 
 //новый поиск и обновление кеша
 func (f *Find) newfind() []string {
-	var res []string
 	find, err := finder.Find(f.path, f.find)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error in Finder.Find: %s\n", err)
@@ -70,9 +64,9 @@ func (f *Find) newfind() []string {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error open cache: %s\n", err)
 	}
-	for i := range res {
+	for i := range find {
 		if !strings.Contains(cachestr, find[i]) {
-			_, err = w.WriteString(res[i] + "\n")
+			_, err = w.WriteString(find[i] + "\n")
 		}
 	}
 	return find
@@ -83,9 +77,9 @@ func runfinder(f *Find) {
 	for i := range res {
 		fmt.Printf("%v\n", res[i])
 	}
-	res1 := f.newfind()
-	for i := range res1 {
-		fmt.Printf("%s\n", res1[i])
+	res = f.newfind()
+	for i := range res {
+		fmt.Printf("%s\n", res[i])
 	}
 	return
 }
@@ -93,7 +87,7 @@ func runfinder(f *Find) {
 func main() {
 
 	if len(os.Args) < 2 {
-		println("Not enough args\nNeed input name and path")
+		println("Not enough args\nNeed input find name")
 		return
 	}
 	if len(os.Args) < 3 {
@@ -102,13 +96,9 @@ func main() {
 		runfinder(input)
 
 	} else {
-		res, err := finder.Find(os.Args[2], os.Args[1])
-		if err != nil {
-			println("Error")
-		}
-		for i := range res {
-			fmt.Printf("%s\n", res[i])
-		}
+		input := newfind(os.Args[2], os.Args[1])
+		println("Args[3] not input. Will find in \\" + input.path + "\n")
+		runfinder(input)
 	}
 	print("\a")
 }
