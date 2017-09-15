@@ -6,14 +6,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Alexsoul133/111/finder"
+	finder "github.com/Alexsoul133/Finder"
 )
 
-type Finder interface {
-	findcache() []string
-	// refreshcache() []string
-	newfind() []string
-}
+// type Finder interface {
+// 	findcache() []string
+// 	// refreshcache() []string
+// 	newfind() []string
+// }
 type Find struct {
 	path  string
 	find  string
@@ -28,6 +28,14 @@ type Video struct {
 	widht   int
 	height  int
 	format  string
+}
+
+func newfind(path string, find string) *Find {
+	return &Find{
+		cache: "cache.txt",
+		path:  path,
+		find:  find,
+	}
 }
 
 //поиск в кеш
@@ -70,7 +78,7 @@ func (f *Find) newfind() []string {
 	return find
 }
 
-func runfinder(f Finder) {
+func runfinder(f *Find) {
 	res := f.findcache()
 	for i := range res {
 		fmt.Printf("%v\n", res[i])
@@ -89,12 +97,9 @@ func main() {
 		return
 	}
 	if len(os.Args) < 3 {
-		input := Find{
-			cache: "cache.txt",
-			path:  "\\" + filepath.Join("\\rackstation3", "YANDEX"),
-			find:  os.Args[1]}
+		input := newfind("\\"+filepath.Join("\\rackstation3", "YANDEX"), os.Args[1])
 		println("Args[3] not input. Will find in \\" + input.path + "\n")
-		runfinder(&input)
+		runfinder(input)
 
 	} else {
 		res, err := finder.Find(os.Args[2], os.Args[1])
