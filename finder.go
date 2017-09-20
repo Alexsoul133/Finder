@@ -42,6 +42,31 @@ func Find(path string, find string) ([]string, error) {
 	return res, err
 }
 
+// func Find(path string, find string) ([]string, error) {
+// 	var res []string
+// 	find = strings.ToLower(find)
+// 	f, _ := os.Open(path)
+// 	files, err := f.Readdirnames(0)
+// 	if err != nil {
+// 		fmt.Fprintf(os.Stderr, "Error Readdir: %s\n", err)
+// 		return nil, err
+// 	}
+// 	for i := range files {
+// 		if strings.Contains(strings.ToLower(files[i]), find) && strings.Contains(strings.ToLower(files[i]), ".") {
+// 			res = append(res, strings.ToLower(path+"\\"+files[i]))
+// 		} else {
+// 			if !strings.Contains(strings.ToLower(files[i]), ".") {
+// 				res1, err := Find(path+"\\"+files[i], find)
+// 				res = append(res, res1...)
+// 				if err != nil {
+// 					fmt.Fprintf(os.Stderr, "Error in FindDir: %s\n", err)
+// 				}
+// 			}
+// 		}
+// 	}
+// 	return res, err
+// }
+
 func Cache(name string, find string) ([]string, error) {
 	res := []string{}
 	find = strings.ToLower(find)
