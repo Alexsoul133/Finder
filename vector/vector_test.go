@@ -47,7 +47,7 @@ func TestVector(t *testing.T) {
 		t.Errorf("Expected \"Zero\", nil got \"%v\", %v", v, err)
 		t.Error(vector.IndexOf("Zero"))
 	}
-	if v, err := vector.At(1); v != "Zero" && err != nil {
+	if v, err := vector.At(-1); v != "" && err == nil {
 		t.Errorf("Expected \"Zero\", nil got \"%v\", %v", v, err)
 		t.Error(vector.IndexOf("Zero"))
 	}
@@ -68,4 +68,19 @@ func TestVector(t *testing.T) {
 		t.Error(vector)
 	}
 	fmt.Print(vector)
+	if v, err := vector.PopFront(); v != "Zero" || err != nil {
+		t.Errorf("Expected Zero-one,nil, got %v %v", v, err)
+		t.Error(vector)
+	}
+	vector.PopFront()
+	vector.PopFront()
+	if v, err := vector.PopFront(); v != "" || err == nil {
+		t.Errorf("Expected \"\", \"Nothing to pop\", got %v %v", v, err)
+		t.Error(vector)
+	}
+	if v, err := vector.PopBack(); v != "" || err == nil {
+		t.Errorf("Expected \"\", \"Nothing to pop\", got %v %v", v, err)
+		t.Error(vector)
+	}
+	fmt.Printf("vector: %v", vector)
 }
