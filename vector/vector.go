@@ -62,20 +62,26 @@ func (v *Vector) IndexOf(s string) int {
 }
 
 func (v *Vector) At(i int) (string, error) {
-	if i > len(v.Vector) || i < 0 {
+	if i > len(v.Vector)-1 || i < 0 {
 		return "", fmt.Errorf("index out of range")
 	}
 	return v.Vector[i], nil
 }
 
-func (v *Vector) Insert(i int, s string) {
+func (v *Vector) Insert(i int, s string) error {
+	if i > len(v.Vector)-1 || i < 0 {
+		return fmt.Errorf("index out of range")
+	}
 	res := append([]string{s}, v.Vector[i:]...)
 	v.Vector = append(v.Vector[:i], res...)
+	return nil
 }
 
-func (v *Vector) Remove(i int) string {
+func (v *Vector) Remove(i int) (string, error) {
+	if i > len(v.Vector)-1 || i < 0 {
+		return "", fmt.Errorf("index out of range")
+	}
 	res := v.Vector[i]
-	copy(v.Vector[i:], v.Vector[i+1:])
-	v.Vector = v.Vector[:len(v.Vector)-1]
-	return res
+	v.Vector = append(v.Vector[:i], v.Vector[i+1:]...)
+	return res, nil
 }
