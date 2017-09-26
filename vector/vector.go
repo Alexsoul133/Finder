@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+// const pos = 0
+
 type Vector struct {
 	Vector []string
 }
@@ -23,19 +25,23 @@ func (v *Vector) PopBack() (string, error) {
 		return "", fmt.Errorf("nothing to pop")
 	}
 	res := v.Vector[len(v.Vector)-1]
+	// v.Vector[len(v.Vector)-1] = ""
 	v.Vector = v.Vector[:len(v.Vector)-1]
 	return res, nil
 }
 
 func (v *Vector) PushFront(d string) {
 	v.Vector = append([]string{d}, v.Vector...)
+
 }
 
 func (v *Vector) PopFront() (string, error) {
 	if len(v.Vector) == 0 {
 		return "", fmt.Errorf("nothing to pop")
 	}
+
 	res := v.Vector[0]
+	// v.Vector[0] = ""
 	v.Vector = v.Vector[1:]
 	return res, nil
 }
@@ -82,6 +88,7 @@ func (v *Vector) Remove(i int) (string, error) {
 		return "", fmt.Errorf("index out of range")
 	}
 	res := v.Vector[i]
+	// v.Vector[i] = ""
 	v.Vector = append(v.Vector[:i], v.Vector[i+1:]...)
 	return res, nil
 }
