@@ -8,40 +8,67 @@ type Deck struct {
 }
 
 func New() *Deck {
-	return &Deck{}
+	return &Deck{deck: make([]string, 2, 2)}
 }
 
 //PushBack value to stock
 func (d *Deck) PushBack(v string) {
-	d.deck = append(d.deck, v)
+	if d.tail < cap(d.deck) {
+		d.deck[d.tail] = v
+		d.tail++
+	} else if d.head > 0 && d.tail == cap(d.deck) {
+		d.deck[d.head-1] = v
+		d.head--
+	} else {
+		// d.deck = append(d.deck, v)
+		res := make([]string, 2*len(d.deck), 2*cap(d.deck))
+		copy(res, d.deck)
+		d.deck = res
+		d.deck[d.tail] = v
+		d.tail++
+	}
 }
 
 //PopBack value from stock
 func (d *Deck) PopBack() (string, error) {
-	if len(d.deck) == 0 {
+	if d.head == d.tail {
 		return "", fmt.Errorf("nothing to pop")
 	}
-	res := d.deck[len(d.deck)-1]
-	d.deck = d.deck[:len(d.deck)-1]
+	res := d.deck[d.tail-1]
+	d.deck[d.tail-1] = ""
+	d.tail--
 	return res, nil
 }
 
 func (d *Deck) PushFront(v string) {
-	d.deck = append([]string{v}, d.deck...)
-
+	if d.head > 0 {
+		d.deck[d.head-1] = v
+		d.head--
+	} else {
+		d.tail += cap(d.deck)
+		d.head += cap(d.deck)
+		res := make([]string, len(d.deck), cap(d.deck))
+		d.deck = append(res, d.deck...)
+		d.deck[d.head-1] = v
+		d.head--
+	}
 }
 
 func (d *Deck) PopFront() (string, error) {
-	if len(d.deck) == 0 {
+	if d.head == d.tail {
 		return "", fmt.Errorf("nothing to pop")
 	}
-	res := d.deck[0]
-	d.deck = d.deck[1:]
+	res := d.deck[d.head]
+	d.deck[d.head] = ""
+	d.head++
 	return res, nil
 }
 
 func (d *Deck) Len() int {
 	return len(d.deck)
+}
+func (d *Deck) Cap() int {
+	return cap(d.deck)
 }
 
 func (d *Deck) String() string {
