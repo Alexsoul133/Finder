@@ -8,25 +8,38 @@ type Deck struct {
 }
 
 func New() *Deck {
-	return &Deck{deck: make([]string, 2, 2)}
+	return &Deck{deck: make([]string, 4, 4)}
 }
 
 //PushBack value to stock
 func (d *Deck) PushBack(v string) {
-	if d.tail < cap(d.deck) {
-		d.deck[d.tail] = v
-		d.tail++
-	} else if d.head > 0 && d.tail == cap(d.deck) {
-		d.deck[d.head-1] = v
-		d.head--
-	} else {
-		// d.deck = append(d.deck, v)
+	// if d.tail < cap(d.deck) {
+	// 	d.deck[d.tail] = v
+	// 	d.tail++
+	// } else if d.head > d.tail && d.tail == cap(d.deck) {
+	// 	d.tail = 0
+	// 	d.deck[d.tail] = v
+	// 	d.tail++
+	// } else {
+	// 	res := make([]string, 2*len(d.deck), 2*cap(d.deck))
+	// 	copy(res, d.deck)
+	// 	d.deck = res
+	// 	d.deck[d.tail] = v
+	// 	d.tail++
+	// }
+
+	if d.tail == d.head && d.tail > 0 {
+		d.tail = cap(d.deck)
 		res := make([]string, 2*len(d.deck), 2*cap(d.deck))
 		copy(res, d.deck)
 		d.deck = res
-		d.deck[d.tail] = v
-		d.tail++
 	}
+	if d.tail == cap(d.deck) {
+		d.tail = 0
+	}
+	d.deck[d.tail] = v
+	d.tail++
+
 }
 
 //PopBack value from stock
@@ -44,6 +57,9 @@ func (d *Deck) PushFront(v string) {
 	if d.head > 0 {
 		d.deck[d.head-1] = v
 		d.head--
+	} else if d.head == 0 && d.tail < cap(d.deck) {
+		d.deck[d.tail] = v
+		d.tail++
 	} else {
 		d.tail += cap(d.deck)
 		d.head += cap(d.deck)
@@ -55,7 +71,7 @@ func (d *Deck) PushFront(v string) {
 }
 
 func (d *Deck) PopFront() (string, error) {
-	if d.head == d.tail {
+	if d.head == cap(d.deck) {
 		return "", fmt.Errorf("nothing to pop")
 	}
 	res := d.deck[d.head]
